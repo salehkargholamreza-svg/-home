@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>داشبورد مدیریتی</title>
+    <style>
+        /* -------------------- ریست عمومی -------------------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f0f4ff 0%, #e6edf9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* -------------------- کانتینر اصلی -------------------- */
+        .dashboard {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        /* -------------------- هدر داشبورد -------------------- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a2639;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 span {
+            color: #3b82f6;
+        }
+
+        .header .date {
+            background: rgba(59, 130, 246, 0.12);
+            padding: 10px 22px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+            border: 1px solid rgba(59, 130, 246, 0.15);
+        }
+
+        /* -------------------- شبکه کارت‌ها -------------------- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        /* -------------------- هر کارت -------------------- */
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 30px 20px 25px;
+            text-align: center;
+            text-decoration: none;
+            color: #0f172a;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* افکت شیشه‌ای روی کارت */
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.15);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        /* آیکون دایره‌ای */
+        .card .icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 4px;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .card:hover .icon {
+            transform: scale(1.08) rotate(2deg);
+        }
+
+        /* عنوان کارت */
+        .card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+        }
+
+        /* توضیح کوتاه */
+        .card p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+            margin: 0;
+            max-width: 180px;
+        }
+
+        /* فلش کوچک */
+        .card .arrow {
+            font-size: 18px;
+            opacity: 0.4;
+            transition: all 0.3s;
+            margin-top: 4px;
+        }
+
+        .card:hover .arrow {
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        /* -------------------- رنگ‌های هر کارت -------------------- */
+        .card-1 .icon {
+            background: linear-gradient(145deg, #3b82f6, #2563eb);
+        }
+        .card-1:hover {
+            border-bottom: 4px solid #3b82f6;
+        }
+
+        .card-2 .icon {
+            background: linear-gradient(145deg, #8b5cf6, #7c3aed);
+        }
+        .card-2:hover {
+            border-bottom: 4px solid #8b5cf6;
+        }
+
+        .card-3 .icon {
+            background: linear-gradient(145deg, #ec4899, #db2777);
+        }
+        .card-3:hover {
+            border-bottom: 4px solid #ec4899;
+        }
+
+        .card-4 .icon {
+            background: linear-gradient(145deg, #10b981, #059669);
+        }
+        .card-4:hover {
+            border-bottom: 4px solid #10b981;
+        }
+
+        /* -------------------- فوتر کوچک -------------------- */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid rgba(0, 0, 0, 0.04);
+            padding-top: 25px;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* -------------------- ریسپانسیو برای موبایل -------------------- */
+        @media (max-width: 600px) {
+            .dashboard {
+                padding: 25px 18px;
+                border-radius: 28px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .card {
+                padding: 20px 12px 18px;
+            }
+            .card .icon {
+                width: 58px;
+                height: 58px;
+                font-size: 26px;
+            }
+            .card h3 {
+                font-size: 16px;
+            }
+            .card p {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                max-width: 280px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <!-- HEADER -->
+        <div class="header">
+            <h1>📊 <span>داشبورد</span> ما</h1>
+            <div class="date" id="dateDisplay">بارگذاری...</div>
+        </div>
+
+        <!-- ۴ کارت با لینک‌های مختلف -->
+        <div class="cards-grid">
+
+            <!-- کارت ۱ -->
+            <a href="https://web.bale.ai/chat?uid=4999732046" target="_blank" class="card card-1">
+                <div class="icon"></div>
+                <h3>کانال دوم بله</h3>
+                <p>وارد کانال بله میشوید</p>
+                <span class="arrow">→</span>
+            </a>
+
+            <!-- کارت ۲ -->
+            <a href="https://web.bale.ai/chat?uid=4803037752" target="_blank" class="card card-2">
+                <div class="icon"></div>
+                <h3>کانال بله</h3>
+                <p>وارد کانال بله میشوید</p>
+                <span class="arrow">→</span>
+            </a>
+
+            <!-- کارت ۳ -->
+            <a href="https://www.aparat.com/AmirAli.HTML" target="_blank" class="card card-3">
+                <div class="icon"></div>
+                <h3>اپارات</h3>
+                <p>کانال اپارات پر از اموزش</p>
+                <span class="arrow">→</span>
+            </a>
+
+            <!-- کارت ۴ -->
+            <a href="#" target="_blank" class="card card-4">
+                <div class="icon"></div>
+                <h3>سایت اصلی</h3>
+                <p>مشاهده سایت گیت‌هاب</p>
+                <span class="arrow">→</span>
+            </a>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            ساخته شده با ❤ &mdash;
+            <a href="#" onclick="alert('سلام! این یک داشبورد نمونه است.')">درباره</a>
+        </div>
+
+    </div>
+
+    <script>
+        // نمایش تاریخ امروز به صورت شمسی (هجری قمری)
+        const dateDisplay = document.getElementById('dateDisplay');
+
+        function showPersianDate() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                weekday: 'long'
+            };
+            // تبدیل به تاریخ شمسی با استفاده از locale فارسی
+            const persianDate = now.toLocaleDateString('fa-IR', options);
+            dateDisplay.textContent = '📅 ' + persianDate;
+        }
+
+        showPersianDate();
+
+        // (اختیاری) کلیک روی کارت‌ها با جلوه‌ی لاگ در کنسول
+        document.querySelectorAll('.card').forEach((card) => {
+            card.addEventListener('click', function(e) {
+                // این فقط برای نمایش در کنسول است، لینک همچنان باز می‌شود
+                console.log('رفتن به: ' + this.href);
+            });
+        });
+    </script>
+
+</body>
+</html>
